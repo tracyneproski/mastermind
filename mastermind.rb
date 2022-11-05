@@ -4,9 +4,19 @@
 class Mastermind
   
   def initialize
+    @solution = [R,R,R,R]
+    #use some kind of random situation for generating solution
+    @guess = []
   end
 
+  def win_check
+    if @solution = @guess
+      puts "Congratulations! You guessed it!"
 
+      play_again_check
+    end
+  end
+end
 
 
 
