@@ -9,16 +9,31 @@ class Mastermind
     @guess = []
   end
 
-  def win_check
-    if @solution = @guess
-      puts "Congratulations! You guessed it!"
-
-      play_again_check
-    end
+  def round
+    #get new guess
+    #split string and iterate with index to check against @solution
+    #print guesses with coded response (get responses and then sort)
+    #output ● for correct guesses in correct position, ○ for correct guesses in 
+    #incorrect position, and _ for incorrect guess
+    
   end
+
+  def begin
+    puts "New Game started. Probably going to put the big instructions in here."
+    puts "Make your first guess:" #explain guess format
+
+    round
+  end 
+    
+   
 end
 
 
 
 
-end
+game = Mastermind.new
+game.begin
+
+
+
+
