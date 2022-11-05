@@ -8,6 +8,7 @@ class Mastermind
     #use some kind of random situation for generating solution
     @guess = []
     @turns = 12
+    @colors = ["R","O","Y","G","B","V"]
   end
 
   def win_check
@@ -16,6 +17,7 @@ class Mastermind
       play_again_check
     else
       puts "Incorrect. Keep trying."
+      @turns -= 1;
       round
     end
   end
@@ -44,18 +46,35 @@ class Mastermind
     end
   end
 
+  def guess_length_check guess
+    if guess.size != 4
+      puts "Please guess exactly 4 colors. Try again."
+      round
+    end
+  end
+
+  def guess_char_check guess     
+    if guess.chars.all? { |char| @colors.include? char.upcase } == false
+      puts "Please make your choice from these colors: R O Y G B V. Try again."
+      round
+    end
+  end
 
   def round
+    puts "You have #{@turns} guesses left.\n"
+    
     if @turns > 0
       puts "Make a guess:"
       guess = gets.chomp
       
       quit_check guess
-      #guess format check
+      guess_length_check guess
+      guess_char_check guess
       @guess = guess.upcase.split('')
+    
       
-      puts "#{@guess} is your guess"
-
+      puts "#{@guess} is your guess" #this is where the little color display thing will go
+      
       win_check
 
       
