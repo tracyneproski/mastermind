@@ -18,31 +18,41 @@ class Mastermind
       puts "You have won! Congratulations!"
       play_again_check
     else
-      current_letter_response = []
+      current_letter_response = [0,0,0,0]
       
       @guess.each_with_index do | letter, index |
         available_colors = @colors
         
-        if available_colors.include?(letter)
-          if @solution.include?(letter) && @solution[index] == @guess[index]
-            current_letter_response.push(2)      
-          elsif @solution.include?(letter) && @solution[index] != @guess[index]
-            current_letter_response.push(1)
+        if available_colors.include?(letter) #has color already been evaluated
+
+          if @solution.include?(letter) #is color in the solution anywhere
+
+
+            @solution.each_with_index do | correct_letter, correct_index | #is color in correct position
+
+              if @solution[correct_index] == letter[index]
+                puts "#{correct_letter} at position #{correct_index} is correct\n\n"
+                current_letter_response[correct_index] = 2
+              else
+                puts "#{correct_letter} at position #{correct_index} is not correct\n\n"              
+              end
+       
+
+
+            available_colors.delete(letter)       
+            end
+
           else
-            current_letter_response.push(0)
+            available_colors.delete(letter)
           end
 
-          available_colors.delete(letter)
+          
         else
-          current_letter_response.push(0)
-          available_colors.delete(letter)
-
-          #something in here about doing each letter and if it has a 2, delete 1 or something
-
+          available_colors.delete(letter)          
         end        
       end
 
-      print current_letter_response.sort.reverse
+      print current_letter_response #.sort.reverse
       
       @turns -= 1;
       round
