@@ -9,6 +9,7 @@ class Mastermind
     @colors = ["R","O","Y","G","B","V"]
     @solution = []
     4.times { @solution.push(@colors.sample) }
+    @current_guess_response = []
   end
 
   def win_check
@@ -16,16 +17,19 @@ class Mastermind
       puts "You have won! Congratulations!"
       play_again_check
     else
-      #puts "Incorrect. Keep trying."
+      @current_guess_response = []
+
       @guess.each_with_index do | letter, index |
-        if @solution.include?(letter) && @solution[index] == @guess[index]
-          puts "You got at least 1 exactly right\n\n"
-        elsif @solution.include?(letter) && @solution[index] != @guess[index]
-          puts "You got a color right, but position wrong.\n\n"
+        if @solution[index].include?(letter) && @solution[index] == @guess[index]
+          @current_guess_response.push(2)
+        elsif @solution[index].include?(letter) && @solution[index] != @guess[index]
+          @current_guess_response.push(1)
         else
-          puts "You didn't get color or position right.\n\n"
+          @current_guess_response.push(0)
         end
       end
+
+      print @current_guess_response.sort.reverse
       
       @turns -= 1;
       round
