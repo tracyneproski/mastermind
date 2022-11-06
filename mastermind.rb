@@ -7,10 +7,33 @@ class Mastermind
     @guess = []
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
+    @available_colors = []
     @solution = @colors.sample(4)
     #@solution = []
     #4.times { @solution.push(@colors.sample) }
-    @current_guess_response = []
+    @current_letter_response = []
+
+  end
+'''
+  def color_eval_check(letter)
+    if @available_colors.include?(letter) == false
+      @available_colors.delete(letter)
+    end
+  end
+'''
+  def color_include_check(letter)
+    if @solution.include?(letter)
+      @current_letter_response[@solution.find_index(letter)] = 1
+      @available_colors.delete(letter)
+    else
+      @available_colors.delete(letter)
+    end
+  end
+
+  def color_position_check(letter, index)
+    if @solution[index] == letter
+      @current_letter_response[@solution.find_index(letter)] = 2
+    end
   end
 
   def win_check
@@ -18,41 +41,17 @@ class Mastermind
       puts "You have won! Congratulations!"
       play_again_check
     else
-      current_letter_response = [0,0,0,0]
-      
-      @guess.each_with_index do | letter, index |
-        available_colors = @colors
-        
-        if available_colors.include?(letter) #has color already been evaluated
+      @current_letter_response = [0,0,0,0]
+      @available_colors = @colors
 
-          if @solution.include?(letter) #is color in the solution anywhere
-
-
-            @solution.each_with_index do | correct_letter, correct_index | #is color in correct position
-
-              if @solution[correct_index] == letter[index]
-                puts "#{correct_letter} at position #{correct_index} is correct\n\n"
-                current_letter_response[correct_index] = 2
-              else
-                puts "#{correct_letter} at position #{correct_index} is not correct\n\n"              
-              end
-       
-
-
-            available_colors.delete(letter)       
-            end
-
-          else
-            available_colors.delete(letter)
-          end
-
-          
-        else
-          available_colors.delete(letter)          
-        end        
+      @guess.each_with_index do | letter, index | 
+        #color_eval_check(letter) #has color already been evaluated this turn
+        color_include_check(letter) #is color in the solution anywhere             
+        color_position_check(letter, index) #is color in the correct position
+           
       end
 
-      print current_letter_response #.sort.reverse
+      print @current_letter_response #.sort.reverse
       
       @turns -= 1;
       round
@@ -97,13 +96,14 @@ class Mastermind
   end
 
   def guess_char_check guess     
-    if guess.chars.all? { |char| @colors.include? char.upcase } == false
+    if guess.chars.all? { |char| @colors.include? char.upcase } == "false"
       puts "Please make your choice from these colors: R O Y G B V. Try again."
       round
     end
   end
 
   def round
+    puts "The solution is #{@solution}." #just for testing
     puts "You have #{@turns} guesses left.\n"
     
     if @turns > 0
@@ -118,6 +118,7 @@ class Mastermind
     
 
       puts "#{@guess} is your guess" #this is where the little color display thing will go
+      
       
       win_check
 
