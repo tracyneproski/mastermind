@@ -16,7 +16,17 @@ class Mastermind
       puts "You have won! Congratulations!"
       play_again_check
     else
-      puts "Incorrect. Keep trying."
+      #puts "Incorrect. Keep trying."
+      @guess.each_with_index do | letter, index |
+        if @solution.include?(letter) && @solution[index] == @guess[index]
+          puts "You got at least 1 exactly right\n\n"
+        elsif @solution.include?(letter) && @solution[index] != @guess[index]
+          puts "You got a color right, but position wrong.\n\n"
+        else
+          puts "You didn't get color or position right.\n\n"
+        end
+      end
+      
       @turns -= 1;
       round
     end
