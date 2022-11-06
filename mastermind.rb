@@ -4,11 +4,11 @@
 class Mastermind
   
   def initialize
-    @solution = ["R","R","R","R"]
-    #use some kind of random situation for generating solution
     @guess = []
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
+    @solution = []
+    4.times { @solution.push(@colors.sample) }
   end
 
   def win_check
@@ -41,7 +41,7 @@ class Mastermind
 
   def quit_check move
     if move.downcase == "quit" || move.downcase == "q"
-      puts "Thanks for playing!"
+      puts "The solution is #{@solution}. Thanks for playing!"
       exit
     end
   end
@@ -72,7 +72,7 @@ class Mastermind
       guess_char_check guess
       @guess = guess.upcase.split('')
     
-      
+
       puts "#{@guess} is your guess" #this is where the little color display thing will go
       
       win_check
