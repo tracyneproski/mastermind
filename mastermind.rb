@@ -7,8 +7,9 @@ class Mastermind
     @guess = []
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
-    @solution = []
-    4.times { @solution.push(@colors.sample) }
+    @solution = @colors.sample(4)
+    #@solution = []
+    #4.times { @solution.push(@colors.sample) }
     @current_guess_response = []
   end
 
@@ -17,19 +18,31 @@ class Mastermind
       puts "You have won! Congratulations!"
       play_again_check
     else
-      @current_guess_response = []
-
+      current_letter_response = []
+      
       @guess.each_with_index do | letter, index |
-        if @solution[index].include?(letter) && @solution[index] == @guess[index]
-          @current_guess_response.push(2)
-        elsif @solution[index].include?(letter) && @solution[index] != @guess[index]
-          @current_guess_response.push(1)
+        available_colors = @colors
+        
+        if available_colors.include?(letter)
+          if @solution.include?(letter) && @solution[index] == @guess[index]
+            current_letter_response.push(2)      
+          elsif @solution.include?(letter) && @solution[index] != @guess[index]
+            current_letter_response.push(1)
+          else
+            current_letter_response.push(0)
+          end
+
+          available_colors.delete(letter)
         else
-          @current_guess_response.push(0)
-        end
+          current_letter_response.push(0)
+          available_colors.delete(letter)
+
+          #something in here about doing each letter and if it has a 2, delete 1 or something
+
+        end        
       end
 
-      print @current_guess_response.sort.reverse
+      print current_letter_response.sort.reverse
       
       @turns -= 1;
       round
@@ -60,6 +73,12 @@ class Mastermind
     end
   end
 
+  def how_to_check move
+    if move.downcase == "howto"
+      how_to
+    end
+  end
+
   def guess_length_check guess
     if guess.size != 4
       puts "Please guess exactly 4 colors. Try again."
@@ -82,6 +101,7 @@ class Mastermind
       guess = gets.chomp
       
       quit_check guess
+      how_to_check guess
       guess_length_check guess
       guess_char_check guess
       @guess = guess.upcase.split('')
@@ -92,8 +112,7 @@ class Mastermind
       win_check
 
       
-      #split string and iterate with index to check against @solution
-      #print guesses with coded response (get responses and then sort)
+
       #output ● for correct guesses in correct position, ○ for correct guesses in 
       #incorrect position, and _ for incorrect guess
    else
@@ -102,8 +121,25 @@ class Mastermind
    end
   end
 
+  def how_to
+    puts "Puzzle contains 4 boxes. Each turn you choose from 6 colors.
+    Color choices: R🔴 O🟠 Y🟡 G🟢 B🔵 V🟣
+    Example turn: ROGY
+    
+    Responses:
+    ● : correct color in correct position
+    ○ : correct color in incorrect position
+    _ : incorrect color
+    
+    The order of the response tiles does not necessarily match the colored
+    characters. 
+    Type howto to read these instructions again.
+    Type q to quit and show solution.\n\n"
+  end
+
+
   def start
-    puts "New Game started. Probably going to put the big instructions in here."
+    how_to
     round
   end 
     
