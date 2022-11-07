@@ -8,8 +8,8 @@ class Mastermind
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
     @available_colors = []
-    @solution = @colors.sample(4)
-    #@solution = []
+    #@solution = @colors.sample(4)
+    @solution = ["Y","B","B","G"] #testing solution
     #4.times { @solution.push(@colors.sample) }
     @current_letter_response = []
 
@@ -46,10 +46,10 @@ class Mastermind
 
       @guess.each_with_index do | letter, index |
         #color_eval_check(letter) #has color already been evaluated this turn
-        if @available_colors.include?(letter)
-          color_include_check(letter) #is color in the solution anywhere             
-          color_position_check(letter, index) #is color in the correct position
-        end  
+        #if @available_colors.include?(letter)
+        color_include_check(letter) #is color in the solution anywhere             
+        color_position_check(letter, index) #is color in the correct position
+        #end  
       end
 
       print @current_letter_response #.sort.reverse
