@@ -17,7 +17,7 @@ class Mastermind
 '''
   def color_eval_check(letter)
     if @available_colors.include?(letter) == false
-      @available_colors.delete(letter)
+      next
     end
   end
 '''
@@ -32,7 +32,7 @@ class Mastermind
 
   def color_position_check(letter, index)
     if @solution[index] == letter
-      @current_letter_response[@solution.find_index(letter)] = 2
+      @current_letter_response[index] = 2
     end
   end
 
@@ -44,11 +44,12 @@ class Mastermind
       @current_letter_response = [0,0,0,0]
       @available_colors = @colors
 
-      @guess.each_with_index do | letter, index | 
+      @guess.each_with_index do | letter, index |
         #color_eval_check(letter) #has color already been evaluated this turn
-        color_include_check(letter) #is color in the solution anywhere             
-        color_position_check(letter, index) #is color in the correct position
-           
+        if @available_colors.include?(letter)
+          color_include_check(letter) #is color in the solution anywhere             
+          color_position_check(letter, index) #is color in the correct position
+        end  
       end
 
       print @current_letter_response #.sort.reverse
