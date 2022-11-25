@@ -14,7 +14,8 @@ characters.
 Type howto to read these instructions again.
 Type q to quit and show solution.
 
-Turn 1 of 10. Your guess: RGYB
+Turn 1 of 10. 
+Your guess: RGYB
 🔴 🟢 🟡 🔵     ● ○ ○ _
 
 Turn 2 of 10. Your guess: GYBV
@@ -57,3 +58,29 @@ guess.each_with_index do | letter, index |
   color_include_check(letter) #has color already been evaluated this turn (formerly eval)           
   color_position_check(letter, index) #is color in the correct position
 end
+
+
+
+def add_color(letter)
+  color_pins.each do |color|
+    if letter == color[0]
+      guess_display.push(color[1])
+    end
+  end
+end
+
+
+def show_guess(letter)
+  guess.each do |letter|
+    add_color
+  end
+end
+
+
+guess.each do |letter|
+  color_pins.each do |color|
+    if letter == color[0]
+      guess_display.push(color[1])
+    end
+  end
+ end

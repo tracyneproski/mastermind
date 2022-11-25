@@ -7,7 +7,6 @@ class Mastermind
     @guess = []
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
-    #@available_colors = []
     #@solution = @colors.sample(4)
     @solution = []
     4.times { @solution.push(@colors.sample) } #could be a "get.chomp" for codemaker
@@ -19,17 +18,45 @@ class Mastermind
     ["G", "G🟢"],
     ["B", "B🔵"],
     ["V", "V🟣"],]
-    @guess_pins = []
+    @positions =
+    [[2, "●"],
+    [1, "○"],
+    [0, "_"],]
   end
 
-  def show_guess(letter,pin)
-    @guess.each do |letter|
-      if letter = @color_pins[0]
-        @guess_pins.push(color_pins[0][1])
+
+  def show_solution
+    @solution_display = []
+    @solution.each do |letter|
+      @color_pins.each do |color|
+        if letter == color[0]
+          @solution_display.push(color[1])
+        end
       end
     end
   end
 
+  def show_guess
+    @guess_display = []
+    @guess.each do |letter|
+      @color_pins.each do |color|
+        if letter == color[0]
+          @guess_display.push(color[1])
+        end
+      end
+    end
+  end
+
+  def show_result
+    @pos_display = []
+    @current_letter_response.each do |position|
+      @positions.each do |pin|
+        if position == pin[0]
+          @pos_display.push(pin[1])
+        end
+      end
+    end
+  end
 
   def color_include_check(letter)
     if @available_colors.include?(letter)
@@ -63,7 +90,8 @@ class Mastermind
     @available_colors = @colors.map(&:clone)
 
     if @guess == @solution
-      puts "You have won! Congratulations!"
+      show_guess
+      puts "\n" + @guess_display.join(" ") + "      You have won! Congratulations!\n\n"
       play_again_check
     else
       @guess.each_with_index do | letter, index |
@@ -71,7 +99,9 @@ class Mastermind
         color_position_check(letter, index) #is color in the correct position
       end
 
-      #print @current_letter_response.sort.reverse #just for testing
+      show_guess
+      show_result
+      puts "\n" + @guess_display.join(" ") + "      " + @pos_display.join(" ") + "\n\n\n" 
       
       @turns -= 1;
       round
@@ -97,7 +127,8 @@ class Mastermind
 
   def quit_check move
     if move.downcase == "quit" || move.downcase == "q"
-      puts "The solution is #{@solution}. Thanks for playing!"
+      show_solution
+      puts "\nThe solution is " + @solution_display.join(" ") + "    Thanks for playing!\n\n"
       exit
     end
   end
@@ -123,7 +154,6 @@ class Mastermind
   end
 
   def round
-    #puts "The solution is #{@solution}." #just for testing
     puts "You have #{@turns} guesses left.\n"
     
     if @turns > 0
@@ -136,17 +166,8 @@ class Mastermind
       guess_char_check(guess)
       @guess = guess.upcase.split('')
     
-
-      puts "R🔴 G🟢 Y🟡 B🔵      ● ○ ○ _" #this is where the little color display thing will go
-
-
-      
       win_check
-
       
-
-      #output ● for correct guesses in correct position, ○ for correct guesses in 
-      #incorrect position, and _ for incorrect guess
    else
     puts "You have run out of turns. Better luck next time!"
     play_again_check    
@@ -166,7 +187,7 @@ class Mastermind
     The order of the response tiles does not necessarily match the colored
     characters. 
     Type howto to read these instructions again.
-    Type q to quit and show solution.\n\n"
+    Type q to quit and show solution.\n\n\n"
   end
 
 
