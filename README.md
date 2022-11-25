@@ -15,8 +15,8 @@ How to address the colorized text, symbols for gameplay, board setup. Then refac
 
 What I used
 -
-List of things used
+Just arrays, really, for the functionality. Removing variables after they'd been checked. Sample 4 times to get the random code.
 
 What I learned
 -
-List of things learned
+That there are different levels of duplication and cloning is important.
