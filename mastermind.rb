@@ -9,8 +9,8 @@ class Mastermind
     @colors = ["R","O","Y","G","B","V"]
     #@available_colors = []
     #@solution = @colors.sample(4)
-    @solution = ["Y","B","B","G"] #testing solution
-    #4.times { @solution.push(@colors.sample) }
+    @solution = []
+    4.times { @solution.push(@colors.sample) }
     @current_letter_response = []
 
   end
@@ -24,14 +24,14 @@ class Mastermind
   def color_include_check(letter)
     if @available_colors.include?(letter)
       if @solution.include?(letter)
-        if @solution.count(letter) == 2
+        if @guess.count(letter) % @solution.count(letter) == 0
           @solution.each_with_index do |correct_letter, index|
             if correct_letter == letter
               @current_letter_response[index] = 1
             end
             @available_colors.delete(letter)
           end
-        elsif @solution.count(letter) == 1
+        elsif @guess.count(letter) % @solution.count(letter) == 1
           solution_index = @solution.find_index(letter)
           @current_letter_response[solution_index] = 1
           @available_colors.delete(letter)
@@ -65,7 +65,7 @@ class Mastermind
         #end  
       end
 
-      print @current_letter_response.sort.reverse
+      print @current_letter_response #.sort.reverse
       
       @turns -= 1;
       round
