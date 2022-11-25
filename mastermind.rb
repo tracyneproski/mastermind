@@ -49,7 +49,7 @@ class Mastermind
 
   def show_result
     @pos_display = []
-    @current_letter_response.each do |position|
+    @current_letter_response.sort.reverse.each do |position|
       @positions.each do |pin|
         if position == pin[0]
           @pos_display.push(pin[1])
@@ -141,14 +141,14 @@ class Mastermind
 
   def guess_length_check guess
     if guess.size != 4
-      puts "Please guess exactly 4 colors. Try again."
+      puts "\nPlease guess exactly 4 colors. Try again.\n\n"
       round
     end
   end
 
   def guess_char_check guess     
-    if guess.chars.all? { |char| @colors.include? char.upcase } == "false"
-      puts "Please make your choice from these colors: R O Y G B V. Try again."
+    if guess.chars.all? { |char| @colors.include? char.upcase } == false
+      puts "\nPlease make your choice from these colors: R O Y G B V. Try again.\n\n"
       round
     end
   end
