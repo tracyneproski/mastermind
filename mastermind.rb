@@ -24,9 +24,18 @@ class Mastermind
   def color_include_check(letter)
     if @available_colors.include?(letter)
       if @solution.include?(letter)
-        solution_index = @solution.find_index(letter)
-        @current_letter_response[solution_index] = 1
-        @available_colors.delete(letter)
+        if @solution.count(letter) == 2
+          @solution.each_with_index do |correct_letter, index|
+            if correct_letter == letter
+              @current_letter_response[index] = 1
+            end
+            @available_colors.delete(letter)
+          end
+        elsif @solution.count(letter) == 1
+          solution_index = @solution.find_index(letter)
+          @current_letter_response[solution_index] = 1
+          @available_colors.delete(letter)
+        end
       else
         @available_colors.delete(letter)
       end
