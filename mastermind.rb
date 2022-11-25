@@ -10,17 +10,27 @@ class Mastermind
     #@available_colors = []
     #@solution = @colors.sample(4)
     @solution = []
-    4.times { @solution.push(@colors.sample) }
+    4.times { @solution.push(@colors.sample) } #could be a "get.chomp" for codemaker
     @current_letter_response = []
-
+    @color_pins =
+    [["R", "R🔴"],
+    ["O", "O🟠"],
+    ["Y", "Y🟡"],
+    ["G", "G🟢"],
+    ["B", "B🔵"],
+    ["V", "V🟣"],]
+    @guess_pins = []
   end
-'''
-  def color_eval_check(letter)
-    if @available_colors.include?(letter) == false
-      next
+
+  def show_guess(letter,pin)
+    @guess.each do |letter|
+      if letter = @color_pins[0]
+        @guess_pins.push(color_pins[0][1])
+      end
     end
   end
-'''
+
+
   def color_include_check(letter)
     if @available_colors.include?(letter)
       if @solution.include?(letter)
@@ -58,14 +68,10 @@ class Mastermind
     else
       @guess.each_with_index do | letter, index |
         color_include_check(letter) #has color already been evaluated this turn (formerly eval)
-        
-        #if @available_colors.include?(letter)
-        #color_include_check(letter) #is color in the solution anywhere             
         color_position_check(letter, index) #is color in the correct position
-        #end  
       end
 
-      print @current_letter_response #.sort.reverse
+      #print @current_letter_response.sort.reverse #just for testing
       
       @turns -= 1;
       round
@@ -117,7 +123,7 @@ class Mastermind
   end
 
   def round
-    puts "The solution is #{@solution}." #just for testing
+    #puts "The solution is #{@solution}." #just for testing
     puts "You have #{@turns} guesses left.\n"
     
     if @turns > 0
@@ -131,8 +137,9 @@ class Mastermind
       @guess = guess.upcase.split('')
     
 
-      puts "#{@guess} is your guess" #this is where the little color display thing will go
-      
+      puts "R🔴 G🟢 Y🟡 B🔵      ● ○ ○ _" #this is where the little color display thing will go
+
+
       
       win_check
 
