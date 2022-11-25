@@ -7,7 +7,7 @@ class Mastermind
     @guess = []
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
-    @available_colors = []
+    #@available_colors = []
     #@solution = @colors.sample(4)
     @solution = ["Y","B","B","G"] #testing solution
     #4.times { @solution.push(@colors.sample) }
@@ -22,11 +22,14 @@ class Mastermind
   end
 '''
   def color_include_check(letter)
-    if @solution.include?(letter)
-      @current_letter_response[@solution.find_index(letter)] = 1
-      @available_colors.delete(letter)
-    else
-      @available_colors.delete(letter)
+    if @available_colors.include?(letter)
+      if @solution.include?(letter)
+        solution_index = @solution.find_index(letter)
+        @current_letter_response[solution_index] = 1
+        @available_colors.delete(letter)
+      else
+        @available_colors.delete(letter)
+      end
     end
   end
 
@@ -37,22 +40,23 @@ class Mastermind
   end
 
   def win_check
+    @current_letter_response = [0,0,0,0]
+    @available_colors = @colors.map(&:clone)
+
     if @guess == @solution
       puts "You have won! Congratulations!"
       play_again_check
     else
-      @current_letter_response = [0,0,0,0]
-      @available_colors = @colors
-
       @guess.each_with_index do | letter, index |
-        #color_eval_check(letter) #has color already been evaluated this turn
+        color_include_check(letter) #has color already been evaluated this turn (formerly eval)
+        
         #if @available_colors.include?(letter)
-        color_include_check(letter) #is color in the solution anywhere             
+        #color_include_check(letter) #is color in the solution anywhere             
         color_position_check(letter, index) #is color in the correct position
         #end  
       end
 
-      print @current_letter_response #.sort.reverse
+      print @current_letter_response.sort.reverse
       
       @turns -= 1;
       round
@@ -111,10 +115,10 @@ class Mastermind
       puts "Make a guess:"
       guess = gets.chomp
       
-      quit_check guess
-      how_to_check guess
-      guess_length_check guess
-      guess_char_check guess
+      quit_check(guess)
+      how_to_check(guess)
+      guess_length_check(guess)
+      guess_char_check(guess)
       @guess = guess.upcase.split('')
     
 

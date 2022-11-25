@@ -28,3 +28,32 @@ def board_icons
   
 
 end
+
+
+
+colors = ["R","O","Y","G","B","V"]
+
+def color_include_check(letter, available_colors, solution, current_letter_response)
+
+  if available_colors.include?(letter)
+    if solution.include?(letter)
+      solution_index = solution.find_index(letter)
+      current_letter_response[solution_index] = 1
+      available_colors.delete(letter)
+    else
+      available_colors.delete(letter)
+    end
+  end
+end
+
+def color_position_check(letter, index)
+  if solution[index] == letter
+    current_letter_response[index] = 2
+  end
+end
+
+
+guess.each_with_index do | letter, index |
+  color_include_check(letter) #has color already been evaluated this turn (formerly eval)           
+  color_position_check(letter, index) #is color in the correct position
+end
