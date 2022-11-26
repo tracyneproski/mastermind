@@ -228,6 +228,8 @@ class Mastermind
       win_check
       
    else
+    show_solution
+    puts "\nThe solution is " + @solution_display.join(" ") + "\n\n"
     puts "You have run out of turns. Better luck next time!"
     play_again_check    
    end
@@ -239,11 +241,13 @@ class Mastermind
     if @turns > 0
       puts "Computer guesses:"
       @guess = []
-      4.times { @guess.push(@colors.sample) }
+      4.times { @guess.push(@colors.sample) } #computer logic goes here
          
       win_check
       
    else
+    show_solution
+    puts "\nThe solution is " + @solution_display.join(" ") + "\n\n"
     puts "Computer has run out of turns. Human wins!"
     play_again_check    
    end
