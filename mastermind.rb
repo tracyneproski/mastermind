@@ -45,8 +45,11 @@ class Mastermind
       puts "\nThanks for playing!\n\n"
       exit
     elsif maker_or_breaker.downcase == "m"
+      @computer_role = "breaker"
       set_code
+      computer_round
     elsif maker_or_breaker.downcase == "b"
+      @computer_role = "maker"
       4.times { @solution.push(@colors.sample) }
       round
     else
@@ -60,7 +63,8 @@ class Mastermind
   def set_code
     puts "Puzzle contains 4 boxes. To create your code for the computer to break, choose from 6 colors.
     Color choices: R🔴 O🟠 Y🟡 G🟢 B🔵 V🟣
-    Example code: ROGY"
+    Example code: ROGY\n\n"
+    puts "Enter your secret code:"
 
     code = gets.chomp
 
@@ -69,7 +73,6 @@ class Mastermind
     code_length_check(code)
     code_char_check(code)
     @solution = code.upcase.split('')
-
   end
 
 
@@ -141,7 +144,12 @@ class Mastermind
       puts "\n" + @guess_display.join(" ") + "      " + @pos_display.join(" ") + "\n\n\n" 
       
       @turns -= 1;
-      round
+
+      if @computer_role == "maker"
+        round
+      elsif @computer_role == "breaker"
+        computer_round
+      end
     end
   end
 
@@ -190,14 +198,14 @@ class Mastermind
     end
   end
 
-  def code_length_check guess
+  def code_length_check code
     if code.size != 4
       puts "\nPlease choose exactly 4 colors. Try again.\n\n"
       set_code
     end
   end
 
-  def code_char_check guess     
+  def code_char_check code     
     if code.chars.all? { |char| @colors.include? char.upcase } == false
       puts "\nPlease create your code from these colors: R O Y G B V. Try again.\n\n"
       set_code
@@ -221,6 +229,22 @@ class Mastermind
       
    else
     puts "You have run out of turns. Better luck next time!"
+    play_again_check    
+   end
+  end
+
+  def computer_round
+    puts "Computer has #{@turns} guesses left.\n"
+    sleep(1)
+    if @turns > 0
+      puts "Computer guesses:"
+      @guess = []
+      4.times { @guess.push(@colors.sample) }
+         
+      win_check
+      
+   else
+    puts "Computer has run out of turns. Human wins!"
     play_again_check    
    end
   end
