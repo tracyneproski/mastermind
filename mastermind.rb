@@ -5,6 +5,7 @@ class Mastermind
   
   def initialize
     @guess = []
+    @code = []
     @turns = 12
     @colors = ["R","O","Y","G","B","V"]
     #@solution = @colors.sample(4)
@@ -35,6 +36,37 @@ class Mastermind
       end
     end
   end
+
+  def maker_or_breaker_check
+    puts "Would you like to be the Codemaker(M) or Codebreaker?(B) \n"
+    
+    maker_or_breaker = gets.chomp
+
+    if maker_or_breaker.downcase == "m"
+      round
+    elsif maker_or_breaker.downcase == "b"
+      set_code
+    else
+      puts "Response not recognized. Please enter M or B"
+      maker_or_breaker_check
+    end
+  end
+
+  def set_code
+    puts "Puzzle contains 4 boxes. To create your code for the computer to break, choose from 6 colors.
+    Color choices: R🔴 O🟠 Y🟡 G🟢 B🔵 V🟣
+    Example code: ROGY"
+
+    code = gets.chomp
+
+    quit_check(code)
+    how_to_check(code)
+    code_length_check(code)
+    code_char_check(code)
+    @code = code.upcase.split('')
+
+  end
+
 
   def show_guess
     @guess_display = []
@@ -153,6 +185,20 @@ class Mastermind
     end
   end
 
+  def code_length_check guess
+    if code.size != 4
+      puts "\nPlease choose exactly 4 colors. Try again.\n\n"
+      set_code
+    end
+  end
+
+  def code_char_check guess     
+    if code.chars.all? { |char| @colors.include? char.upcase } == false
+      puts "\nPlease create your code from these colors: R O Y G B V. Try again.\n\n"
+      set_code
+    end
+  end
+
   def round
     puts "You have #{@turns} guesses left.\n"
     
@@ -175,9 +221,11 @@ class Mastermind
   end
 
   def how_to
-    puts "Puzzle contains 4 boxes. Each turn you choose from 6 colors.
+    puts "Puzzle contains 4 boxes. The Codemaker will create a code from 
+    the available 6 colors, and the Codebreaker will try to guess the code 
+    within 12 turns.
     Color choices: R🔴 O🟠 Y🟡 G🟢 B🔵 V🟣
-    Example turn: ROGY
+    Example code: ROGY
     
     Responses:
     ● : correct color in correct position
@@ -193,7 +241,7 @@ class Mastermind
 
   def start
     how_to
-    round
+    maker_or_breaker_check
   end 
     
    
