@@ -10,7 +10,6 @@ class Mastermind
     @colors = ["R","O","Y","G","B","V"]
     #@solution = @colors.sample(4)
     @solution = []
-    4.times { @solution.push(@colors.sample) } #could be a "get.chomp" for codemaker
     @current_letter_response = []
     @color_pins =
     [["R", "R🔴"],
@@ -42,15 +41,21 @@ class Mastermind
     
     maker_or_breaker = gets.chomp
 
-    if maker_or_breaker.downcase == "m"
-      round
-    elsif maker_or_breaker.downcase == "b"
+    if maker_or_breaker.downcase == "quit" || maker_or_breaker.downcase == "q"
+      puts "\nThanks for playing!\n\n"
+      exit
+    elsif maker_or_breaker.downcase == "m"
       set_code
+    elsif maker_or_breaker.downcase == "b"
+      4.times { @solution.push(@colors.sample) }
+      round
     else
       puts "Response not recognized. Please enter M or B"
       maker_or_breaker_check
     end
   end
+
+
 
   def set_code
     puts "Puzzle contains 4 boxes. To create your code for the computer to break, choose from 6 colors.
@@ -63,7 +68,7 @@ class Mastermind
     how_to_check(code)
     code_length_check(code)
     code_char_check(code)
-    @code = code.upcase.split('')
+    @solution = code.upcase.split('')
 
   end
 
