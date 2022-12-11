@@ -11,6 +11,7 @@ class Mastermind
     #@solution = @colors.sample(4)
     @solution = []
     @current_letter_response = []
+    @guess_as_number = []
     @color_pins =
     [["R", "R🔴"],
     ["O", "O🟠"],
@@ -22,6 +23,31 @@ class Mastermind
     [[2, "●"],
     [1, "○"],
     [0, "_"],]
+    @numbers_for_letters = 
+    [["R", 1],
+    ["O", 2],
+    ["Y", 3],
+    ["G", 4],
+    ["B", 5],
+    ["V", 6],]
+    @all_combinations = []
+  end
+
+  def generate_combinations
+    # loop through the first digit
+    (1..6).each do |first|
+      # loop through the second digit
+      (1..6).each do |second|
+        # loop through the third digit
+        (1..6).each do |third|
+          # loop through the fourth digit
+          (1..6).each do |fourth|
+            # add the combination to the array
+            @all_combinations << [first, second, third, fourth]
+          end
+        end
+      end
+    end
   end
 
 
@@ -97,6 +123,12 @@ class Mastermind
       end
     end
   end
+
+  def letter_to_number
+    @guess map each letter corropond to number
+  end
+
+
 
   def color_include_check(letter)
     if @available_colors.include?(letter)
@@ -239,10 +271,22 @@ class Mastermind
     puts "Computer has #{@turns} guesses left.\n"
     sleep(1)
     if @turns > 0
+      
+      if @current_letter_response == []
+        puts "\nThis is the first round"
+      else
+        puts "\nThis is the guess from the previous turn: #{@guess}"
+        letter_to_number
+        puts "\nThis is the guess from the previous turn in number format: #{@guess_as_number}"
+        puts "\nThis is the letter response from the previous turn: #{@current_letter_response}"
+      end
+            
       puts "Computer guesses:"
       @guess = []
       4.times { @guess.push(@colors.sample) } #computer logic goes here
-         
+      
+
+      
       win_check
       
    else
@@ -273,6 +317,7 @@ class Mastermind
 
 
   def start
+    generate_combinations
     how_to
     maker_or_breaker_check
   end 
