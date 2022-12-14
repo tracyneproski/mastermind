@@ -11,25 +11,24 @@ class Mastermind
     #@solution = @colors.sample(4)
     @solution = []
     @current_letter_response = []
-    @guess_as_number = []
-    @color_pins =
-    [["R", "R🔴"],
-    ["O", "O🟠"],
-    ["Y", "Y🟡"],
-    ["G", "G🟢"],
-    ["B", "B🔵"],
-    ["V", "V🟣"],]
+    @letter_conversion =
+    [["R", "R🔴",1],
+    ["O", "O🟠",2],
+    ["Y", "Y🟡",3],
+    ["G", "G🟢",4],
+    ["B", "B🔵",5],
+    ["V", "V🟣",6],]
     @positions =
     [[2, "●"],
     [1, "○"],
     [0, "_"],]
-    @numbers_for_letters = 
-    [["R", 1],
-    ["O", 2],
-    ["Y", 3],
-    ["G", 4],
-    ["B", 5],
-    ["V", 6],]
+    #@numbers_for_letters = 
+    #[["R", 1],
+    #["O", 2],
+    #["Y", 3],
+    #["G", 4],
+    #["B", 5],
+    #["V", 6],]
     @all_combinations = []
   end
 
@@ -54,7 +53,7 @@ class Mastermind
   def show_solution
     @solution_display = []
     @solution.each do |letter|
-      @color_pins.each do |color|
+      @letter_conversion.each do |color|
         if letter == color[0]
           @solution_display.push(color[1])
         end
@@ -102,12 +101,12 @@ class Mastermind
   end
 
 
-  def show_guess
-    @guess_display = []
+  def letter_to_number
+    @guess_as_number = []
     @guess.each do |letter|
-      @color_pins.each do |color|
+      @letter_conversion.each do |color|
         if letter == color[0]
-          @guess_display.push(color[1])
+          @guess_as_number.push(color[2])
         end
       end
     end
@@ -124,8 +123,15 @@ class Mastermind
     end
   end
 
-  def letter_to_number
-    @guess map each letter corropond to number
+  def show_guess
+    @guess_display = []
+    @guess.each do |letter|
+      @letter_conversion.each do |color|
+        if letter == color[0]
+          @guess_display.push(color[1])
+        end
+      end
+    end
   end
 
 
@@ -180,6 +186,7 @@ class Mastermind
       if @computer_role == "maker"
         round
       elsif @computer_role == "breaker"
+        puts "\nThis is current letter response sort reverse #{@current_letter_response.sort.reverse}"
         computer_round
       end
     end
@@ -271,20 +278,22 @@ class Mastermind
     puts "Computer has #{@turns} guesses left.\n"
     sleep(1)
     if @turns > 0
-      
-      if @current_letter_response == []
-        puts "\nThis is the first round"
-      else
+      if @turns == 12
+        puts "Computer guesses:"
+        @guess = ["R","R","O","O"]
+        # specify first 3 guesses as 1122, 3344, 5566, remove options from @all_combinations as appropriate
+        # If there are all 0s, remove all combinations with either color
+        # If there are all 1s, set guess as available colors
+      elsif @current_letter_response != []
         puts "\nThis is the guess from the previous turn: #{@guess}"
         letter_to_number
         puts "\nThis is the guess from the previous turn in number format: #{@guess_as_number}"
         puts "\nThis is the letter response from the previous turn: #{@current_letter_response}"
+                  
+        puts "Computer guesses:"
+        @guess = []
+        4.times { @guess.push(@colors.sample) } #computer logic goes here
       end
-            
-      puts "Computer guesses:"
-      @guess = []
-      4.times { @guess.push(@colors.sample) } #computer logic goes here
-      
 
       
       win_check
