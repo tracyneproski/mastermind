@@ -11,6 +11,12 @@ class Mastermind
     #@solution = @colors.sample(4)
     @solution = []
     @current_letter_response = []
+    @guess1 = []
+    @guess2 = []
+    @guess3 = []
+    @guess4 = []
+    @guess5 = []
+    @guess6 = []
     @letter_conversion =
     [["R", "R🔴",1],
     ["O", "O🟠",2],
@@ -181,6 +187,14 @@ class Mastermind
       show_result
       puts "\n" + @guess_display.join(" ") + "      " + @pos_display.join(" ") + "\n\n\n" 
       
+      if @turns == 12;
+        @guess1 = @current_letter_response
+      elsif @turns == 11;
+        @guess2 = @current_letter_response
+      elsif @turns == 10;
+        @guess3 = @current_letter_response
+      end
+
       @turns -= 1;
 
       if @computer_role == "maker"
@@ -274,6 +288,32 @@ class Mastermind
    end
   end
 
+  def remove_colors
+    if @guess1 == [0,0,0,0]
+      @colors = @colors.map(&:clone) - ["R","O"]
+    end
+
+    if @guess2 == [0,0,0,0]
+      @colors = @colors.map(&:clone) - ["Y","G"]
+    end
+
+    if @guess3 == [0,0,0,0]
+      @colors = @colors.map(&:clone) - ["B","V"]
+    end
+
+    if @guess4 == [0,0,0,0]
+      @colors = @colors.map(&:clone) - ["O","Y"]
+    end
+
+    if @guess5 == [0,0,0,0]
+      @colors = @colors.map(&:clone) - ["G","B"]
+    end
+
+    if @guess6 == [0,0,0,0]
+      @colors = @colors.map(&:clone) - ["V","R"]
+    end
+  end
+  
   def computer_round
     puts "Computer has #{@turns} guesses left.\n"
     sleep(1)
@@ -281,6 +321,21 @@ class Mastermind
       if @turns == 12
         puts "Computer guesses:"
         @guess = ["R","R","O","O"]
+      elsif @turns == 11
+        puts "Computer guesses:"
+        @guess = ["Y","Y","G","G"]
+      elsif @turns == 10
+        puts "Computer guesses:"
+        @guess = ["B","B","V","V"]
+      elsif @turns == 9
+        puts "Computer guesses:"
+        @guess = ["O","O","Y","Y"]
+      elsif @turns == 8
+        puts "Computer guesses:"
+        @guess = ["G","G","B","B"]
+      elsif @turns == 7
+        puts "Computer guesses:"
+        @guess = ["V","V","R","R"]
         # specify first 3 guesses as 1122, 3344, 5566, remove options from @all_combinations as appropriate
         # If there are all 0s, remove all combinations with either color
         # If there are all 1s, set guess as available colors
@@ -295,7 +350,7 @@ class Mastermind
         4.times { @guess.push(@colors.sample) } #computer logic goes here
       end
 
-      
+      remove_colors
       win_check
       
    else
@@ -326,6 +381,7 @@ class Mastermind
 
 
   def start
+    @colors = ["R","O","Y","G","B","V"]
     generate_combinations
     how_to
     maker_or_breaker_check
